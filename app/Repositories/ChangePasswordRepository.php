@@ -1,16 +1,20 @@
 <?php
 
 namespace App\Repositories;
+
+use App\Http\Controllers\ChangePasswordController;
 use PDO;
 use PDOException;
+use Illuminate\Http\Request;
+use App\Http\Requests\ChangePasswordRequest;
 
 class ChangePasswordRepository implements ChangePasswordRepositoryInterface
 {
-    protected $model;
+    protected $request;
 
-    public function __construct($model)
+    public function __construct(ChangePasswordRequest $request)
     {
-        $this->$model = $model;
+        $this->$request = $request;
     }
 
     public function connectDataBase($request)
@@ -23,4 +27,13 @@ class ChangePasswordRepository implements ChangePasswordRepositoryInterface
         return $conn;
     }
 
+    public function querySelectUser($request){
+        $connection = $this->connectDataBase($request);
+
+        $user = $connection->prepare('SELECT * FROM wp_users WHERE user_email = :user_email');
+        $user->bindValue(':user_email', $request->email);
+        $user->execute();
+
+        return $user;
+    }
 }
