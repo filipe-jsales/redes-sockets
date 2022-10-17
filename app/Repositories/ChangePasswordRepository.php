@@ -36,4 +36,14 @@ class ChangePasswordRepository implements ChangePasswordRepositoryInterface
 
         return $user;
     }
+
+        public function queryUpdatePassword($request){
+
+        $connection = $this->connectDataBase($request);
+
+        $query = $connection->prepare("UPDATE wp_users SET user_pass = ? WHERE user_email = ?");
+        $query->execute([$request->new_pass, $request->email]);
+
+        return response()->json(['Password changed', 200]);
+    }
 }
