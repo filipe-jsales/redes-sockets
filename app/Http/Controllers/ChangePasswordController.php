@@ -7,10 +7,11 @@ use App\Http\Requests\ChangePasswordRequest;
 use App\Repositories\ChangePasswordRepository;
 use PDO;
 
+//controle de rotas
 class ChangePasswordController extends Controller
 {
     
-    public function update(ChangePasswordRequest $request)
+    public function changeAdminPassword(ChangePasswordRequest $request)
     {
 
         $changePasswordRepository = new ChangePasswordRepository($request);

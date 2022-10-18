@@ -13,4 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('change-password', [ChangePasswordController::class, 'update']);
+Route::post('change-password', [ChangePasswordController::class, 'changeAdminPassword']);
