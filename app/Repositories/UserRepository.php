@@ -7,12 +7,8 @@ use PDO;
 
 class UserRepository implements UserRepositoryInterface
 {
-
-
     
     public function querySelectUser($conn, $request) {
-        // dd($conn);
-        // dd($request);
         $user = $conn->prepare('SELECT * FROM users WHERE email = :email');
         $user->bindValue(':email', $request->email);
         $user->execute();

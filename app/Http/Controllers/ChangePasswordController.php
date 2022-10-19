@@ -17,9 +17,9 @@ class ChangePasswordController extends Controller
     }
     
 
-    public function changeAdminPassword(ChangePasswordRequest $request)
+    public function changePassword(ChangePasswordRequest $request)
     {
-        return $this->change_password_service->changeAdminPassword($request);
+        return $this->change_password_service->changePassword($request);
     }
 
 }

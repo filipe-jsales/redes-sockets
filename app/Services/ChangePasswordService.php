@@ -25,7 +25,7 @@ class ChangePasswordService
         $this->user_repository = $user_repository;
     }
     
-    public function changeAdminPassword($request) {
+    public function changePassword($request) {
         $conn = $this->connect_service->connectDataBase($request);
         $user = $this->user_repository->querySelectUser($conn, $request);
 
