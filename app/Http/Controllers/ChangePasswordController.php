@@ -4,30 +4,22 @@ namespace App\Http\Controllers;
 // namespace App\Repositories;
 
 use App\Http\Requests\ChangePasswordRequest;
-use App\Repositories\ChangePasswordRepository;
-use PDO;
+use App\Services\ChangePasswordService;
 
 //controle de rotas
 class ChangePasswordController extends Controller
 {
+    protected $change_password_service;
+
+    public function __construct(ChangePasswordService $change_password_service)
+    {
+        $this->change_password_service = $change_password_service;
+    }
     
+
     public function changeAdminPassword(ChangePasswordRequest $request)
     {
-
-        $changePasswordRepository = new ChangePasswordRepository($request);
-        //database connection 
-        $changePasswordRepository->connectDataBase($request);
-
-        //query select user by email
-        $querySelectUser = $changePasswordRepository->querySelectUser($request);
-        
-        $dados = $querySelectUser->fetch(PDO::FETCH_OBJ);
-
-        if(!isset($dados->id))
-        {
-            return response()->json(['Email not found'], 422);
-        }
-        return $changePasswordRepository->queryUpdatePassword($request);
+        return $this->change_password_service->changeAdminPassword($request);
     }
 
 }

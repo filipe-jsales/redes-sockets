@@ -2,48 +2,37 @@
 
 namespace App\Services;
 
+use App\Repositories\ChangePasswordRepository;
+use App\Repositories\UserRepository;
 use PDO;
-use PDOException;
-use App\Repositories\ChangePasswordRepositoryInterface;
-
 
 //logica e validação dos dados
-class ChangePasswordService 
+class ChangePasswordService
 {
-    protected $repository;
+    protected $change_password_repository;
+    protected $connect_service;
+    protected $user_repository;
 
-    public function __construct(ChangePasswordRepositoryInterface $repository)
+    public function __construct(
+        ConnectService $connect_service,
+        ChangePasswordRepository $change_password_repository,
+        UserRepository $user_repository
+    )
+
     {
-        $this->$repository = $repository;
+        $this->change_password_repository = $change_password_repository;
+        $this->connect_service = $connect_service;
+        $this->user_repository = $user_repository;
     }
+    
+    public function changeAdminPassword($request) {
+        $conn = $this->connect_service->connectDataBase($request);
+        $user = $this->user_repository->querySelectUser($conn, $request);
 
-    public function connectDataBase($request)
-    {
-        try {
-            $connection = new PDO("mysql:host=$request->db_host;dbname=$request->db_name", $request->db_username, $request->db_pass);
-        } catch (PDOException) {
-            return response()->json(['Could not connect'], 432);
+        if(!isset($user->id))
+        {
+            return response()->json(['Email not found'], 422);
         }
-        return $connection;
-    }
-
-    public function querySelectUser($request){
-        $connection = $this->connectDataBase($request);
-
-        $user = $connection->prepare('SELECT * FROM wp_users WHERE user_email = :user_email');
-        $user->bindValue(':user_email', $request->email);
-        $user->execute();
-
-        return $user;
-    }
-
-        public function queryUpdatePassword($request){
-
-        $connection = $this->connectDataBase($request);
-
-        $query = $connection->prepare("UPDATE wp_users SET user_pass = ? WHERE user_email = ?");
-        $query->execute([$request->new_pass, $request->email]);
-
-        return response()->json(['Password changed', 200]);
+        return $this->change_password_repository->queryUpdatePassword($conn, $request);
     }
 }

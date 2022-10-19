@@ -27,7 +27,7 @@ class ChangePasswordRequest extends FormRequest
             'db_host' => 'required',
             'db_name' => 'required',
             'db_username' => 'required',
-            'db_pass' => 'required',
+            'password' => 'required',
             'email' => 'required',
             'new_pass' => 'required'
         ];
