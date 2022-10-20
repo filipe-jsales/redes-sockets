@@ -8,8 +8,8 @@ use PDO;
 class UserRepository implements UserRepositoryInterface
 {
     
-    public function querySelectUser($conn, $request) {
-        $user = $conn->prepare('SELECT * FROM users WHERE email = :email');
+    public function querySelectUser($connection, $request) {
+        $user = $connection->prepare('SELECT * FROM users WHERE email = :email');
         $user->bindValue(':email', $request->email);
         $user->execute();
 
