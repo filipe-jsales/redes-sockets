@@ -395,12 +395,12 @@ void ngethost(unsigned char* host, int query_type)
                 long* p;
                 p = (long*)answers[i].rdata;
                 a.sin_addr.s_addr = (*p);
-                std::cout << "has IPv4 address : " << inet_ntoa(a.sin_addr);
+                std::cout << " has IPv4 address : " << inet_ntoa(a.sin_addr);
             }
             else if (ntohs(answers[i].resource->type) == 5)
-                std::cout << "has alias name : " << answers[i].rdata;
+                std::cout << " has alias name : " << answers[i].rdata;
             else if (ntohs(answers[i].resource->type) == 12)
-                std::cout << "has domain name :" << answers[i].rdata;
+                std::cout << " has domain name :" << answers[i].rdata;
             std::cout << "\n";
         }
 
@@ -409,13 +409,13 @@ void ngethost(unsigned char* host, int query_type)
         for (i = 0; i < ntohs(dns->auth_count); i++)
         {
 
-            std::cout << "Name : " << auth[i].name;
+            std::cout << " Name : " << auth[i].name;
             if (ntohs(auth[i].resource->type) == 2)
-                std::cout << "has nameserver : " << auth[i].rdata;
+                std::cout << " has nameserver : " << auth[i].rdata;
             else if (ntohs(auth[i].resource->type) == 6)
-                std::cout << "has start of authority : " << auth[i].rdata;
+                std::cout << " has start of authority : " << auth[i].rdata;
             else if (ntohs(auth[i].resource->type) == 12)
-                std::cout << "has domain name : " << auth[i].rdata;
+                std::cout << " has domain name : " << auth[i].rdata;
             std::cout << "\n";
         }
 
@@ -423,13 +423,13 @@ void ngethost(unsigned char* host, int query_type)
         std::cout << "\nAdditional Records : " << ntohs(dns->add_count) << "\n";
         for (i = 0; i < ntohs(dns->add_count); i++)
         {
-            std::cout << "Name : " << addinfo[i].name;
+            std::cout << " Name : " << addinfo[i].name;
             if (ntohs(addinfo[i].resource->type) == 1)
             {
                 long* p;
                 p = (long*)addinfo[i].rdata;
                 a.sin_addr.s_addr = (*p);
-                std::cout << "has IPv4 address : " << inet_ntoa(a.sin_addr);
+                std::cout << " has IPv4 address : " << inet_ntoa(a.sin_addr);
             }
             std::cout << "\n";
         }
