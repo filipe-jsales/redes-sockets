@@ -5,6 +5,12 @@ Run the localhost server:
 $ python server.py
 ```
 
+Run 2 clients in different cmd's:
+```
+$ python client.py
+```
+
+Then you can send messages in the prompt line, the message will be sent through sockets to the other client, the server also will be able to see the message records.
 
 ## UDP task:
 
