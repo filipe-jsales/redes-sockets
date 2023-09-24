@@ -5,6 +5,16 @@ Run the localhost server:
 $ python server.py
 ```
 
+Tunnel the localhost web server to a public URL using ngrok:
+```
+$ ./ngrok http http://127.0.0.1:8080
+```
+
+After this, ngrok will provide a public URL that will redirect to the localhost server, eg:
+```
+Forwarding                    http://33c4-2804-4df4-8000-11b0-553f-d5aa-653-c065.ngrok-free.app -> http://localhost:8080
+```
+
 You can access the localhost in your browser that will work as a client for the application, additionally you can run a curl or a postman:
 
 ```
