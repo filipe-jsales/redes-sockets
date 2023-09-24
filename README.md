@@ -5,12 +5,13 @@ Run the localhost server:
 $ python server.py
 ```
 
-Run 2 clients in different cmd's:
+You can access the localhost in your browser that will work as a client for the application, additionally you can run a curl or a postman:
+
 ```
-$ python client.py
+$ curl -X POST -d "Nova mensagem a ser adicionada" http://127.0.0.1:8080/add_message
 ```
 
-Then you can send messages in the prompt line, the message will be sent through sockets to the other client, the server also will be able to see the message records.
+The client will receive a post http request and return a response, if succeeded will write in the book.txt file and display it in the web browser page
 
 ## UDP task:
 

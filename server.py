@@ -1,55 +1,52 @@
 import socket
-import threading
 
-HOST = '127.0.0.1'
-PORT = 12345
+def handle_request(request_text):
+    # Analisar a solicitação HTTP GET para determinar a ação
+    if "GET /" in request_text:
+        # Página inicial - exibir o livro de visitas
+        with open("book.txt", "r") as book_file:
+            messages = book_file.read()
+            response_text = f"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
+            response_text += "<html><head><title>Livro de Visitas</title></head><body>"
+            response_text += "<h1>Livro de Visitas</h1>"
+            response_text += "<h2>Mensagens Anteriores:</h2>"
+            response_text += "<p>" + messages.replace("\n", "<br>") + "</p>"
+            response_text += "</body></html>"
+        return response_text
+    elif "POST /add_message" in request_text:
+        # Adicionar uma nova mensagem via POST
+        message = request_text.split("\r\n\r\n")[-1]
+        with open("book.txt", "a") as book_file:
+            book_file.write(message + "\n")
+        # Redirecionar de volta para a página inicial
+        response_text = "HTTP/1.1 302 Found\r\nLocation: /\r\n\r\n"
+        return response_text
+    else:
+        # Página não encontrada
+        response_text = "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\nPágina não encontrada."
+        return response_text
 
-messages = []
+def start_server():
+    HOST = '127.0.0.1'
+    PORT = 8080
 
-def broadcast_message(message, client_socket):
-    for client in clients:
-        if client != client_socket:
-            try:
-                client.send(message)
-            except:
-                clients.remove(client)
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind((HOST, PORT))
+    server_socket.listen(1)
 
-def handle_client(client_socket):
-    client_address = client_socket.getpeername()
-    print(f"Cliente {client_address} conectado.")
-    
+    print(f"Servidor web do Livro de Visitas ouvindo em {HOST}:{PORT}")
+
     while True:
-        try:
-            message = client_socket.recv(1024)
-            if message:
-                formatted_message = f"De Cliente {client_address}: {message.decode('utf-8')}"
-                print(formatted_message)
-                messages.append(formatted_message.encode('utf-8'))
-                broadcast_message(formatted_message.encode('utf-8'), client_socket)
-            else:
-                remove_client(client_socket)
-        except:
-            continue
+        client_socket, client_address = server_socket.accept()
+        print(f"Conexão de {client_address}")
 
-def remove_client(client_socket):
-    if client_socket in clients:
-        client_address = client_socket.getpeername()
-        print(f"Cliente {client_address} desconectado.")
-        clients.remove(client_socket)
+        request = client_socket.recv(1024).decode('utf-8')
 
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind((HOST, PORT))
-server_socket.listen(5)
+        if request:
+            response = handle_request(request)
+            client_socket.send(response.encode('utf-8'))
 
-print(f"Servidor escutando em {HOST}:{PORT}")
+        client_socket.close()
 
-clients = []
-
-while True:
-    client_socket, client_address = server_socket.accept()
-    clients.append(client_socket)
-    print(f"Conexão estabelecida com {client_address}")
-
-    # Iniciar uma thread para lidar com o cliente
-    client_handler = threading.Thread(target=handle_client, args=(client_socket,))
-    client_handler.start()
+if __name__ == "__main__":
+    start_server()
