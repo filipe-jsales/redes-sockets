@@ -1,14 +1,11 @@
 import socket
 import threading
 
-# Configuração do servidor
 HOST = '127.0.0.1'
 PORT = 12345
 
-# Armazena as mensagens do chat
 messages = []
 
-# Função para enviar mensagens para todos os clientes conectados
 def broadcast_message(message, client_socket):
     for client in clients:
         if client != client_socket:
@@ -17,7 +14,6 @@ def broadcast_message(message, client_socket):
             except:
                 clients.remove(client)
 
-# Função para lidar com um cliente
 def handle_client(client_socket):
     client_address = client_socket.getpeername()
     print(f"Cliente {client_address} conectado.")
@@ -35,14 +31,12 @@ def handle_client(client_socket):
         except:
             continue
 
-# Função para remover um cliente da lista de clientes
 def remove_client(client_socket):
     if client_socket in clients:
         client_address = client_socket.getpeername()
         print(f"Cliente {client_address} desconectado.")
         clients.remove(client_socket)
 
-# Configuração do socket do servidor
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((HOST, PORT))
 server_socket.listen(5)

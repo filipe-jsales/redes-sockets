@@ -1,8 +1,8 @@
 import socket
 import threading
-# Configuração do cliente
-HOST = '127.0.0.1'  # Endereço IP do servidor
-PORT = 12345        # Porta do servidor
+
+HOST = '127.0.0.1'  
+PORT = 12345       
 
 # Configurar o socket do cliente
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19,7 +19,7 @@ def receive_messages():
         except:
             continue
 
-# Iniciar uma thread para receber mensagens
+# Iniciar uma thread para receber mensagens 
 receive_thread = threading.Thread(target=receive_messages)
 receive_thread.start()
 
