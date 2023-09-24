@@ -8,8 +8,10 @@ $ python server.py
 You can access the localhost in your browser that will work as a client for the application, additionally you can run a curl or a postman:
 
 ```
-$ curl -X POST -d "Nova mensagem a ser adicionada" http://127.0.0.1:8080/add_message
+$ curl -k -X POST -d "teste" https://33c4-2804-4df4-8000-11b0-553f-d5aa-653-c065.ngrok-free.app/add_message
 ```
+
+As ngrok is a free tool, we need to bypass the SSL verify by using the flag -k in curl
 
 The client will receive a post http request and return a response, if succeeded will write in the book.txt file and display it in the web browser page
 
