@@ -1,4 +1,6 @@
 import socket
+from datetime import datetime
+
 
 def handle_request(request_text):
     # Analisar a solicitação HTTP GET para determinar a ação
@@ -7,8 +9,8 @@ def handle_request(request_text):
         with open("book.txt", "r") as book_file:
             messages = book_file.read()
             response_text = f"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
-            response_text += "<html><head><title>Livro de Visitas</title></head><body>"
-            response_text += "<h1>Livro de Visitas</h1>"
+            response_text += "<html><head><title>Registro de Mensagens</title></head><body>"
+            response_text += "<h1>Registro de Mensages</h1>"
             response_text += "<h2>Mensagens Anteriores:</h2>"
             response_text += "<p>" + messages.replace("\n", "<br>") + "</p>"
             response_text += "</body></html>"
@@ -16,8 +18,10 @@ def handle_request(request_text):
     elif "POST /add_message" in request_text:
         # Adicionar uma nova mensagem via POST
         message = request_text.split("\r\n\r\n")[-1]
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         with open("book.txt", "a") as book_file:
-            book_file.write(message + "\n")
+            book_file.write(f"{timestamp}: {message}\n")
         # Redirecionar de volta para a página inicial
         response_text = "HTTP/1.1 302 Found\r\nLocation: /\r\n\r\n"
         return response_text
